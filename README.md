@@ -60,7 +60,7 @@ Input:
 - choose 5:  create files in VTU format with individual files  
 - First timestamp: 1  
 - Last timestamp: -1  
-- choose one (Z=1, X=2, Y=3):  
+- choose one (1=Z, 2=N, 3=E):  
 
 Download the .vtu files in ./OUTPUT_FILES and open ParaView  
 - File > Open
