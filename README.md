@@ -84,8 +84,8 @@ make specfem3D
 ml miniconda3/conda24.5.0_py3.9 gcc10/10.2.1 nvhpc-24.11_hpcx-2.20_cuda-12.6
 ml cuda/12.8
 # To do profiling, uncomment below
-# PROFILER="nsys profile --trace cuda,nvtx,openmp,mpi --delay 10 --duration 10 --output specfem3D-profile-${SLURM_JOB_ID}.nsys-rep"
-# ml cuda/12.8
+PROFILER="nsys profile --trace cuda,nvtx,openmp,mpi --delay 10 --duration 10 --output specfem3D-profile-${SLURM_JOB_ID}.nsys-rep"
+ml cuda/12.8
 
 $PROFILER \
     mpirun -np 6 ./bin/xspecfem3D
