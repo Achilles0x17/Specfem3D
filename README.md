@@ -73,7 +73,8 @@ git submodule update --init --recursive
 
 make clean
 
-./configure --with-cuda=cuda9 CUDA_LIB="$NVHPC_ROOT/cuda/lib64" CUDA_INC="$NVHPC_ROOT/cuda/include" --enable-cuda-aware-mpi
+./configure --with-cuda=cuda9 CUDA_LIB="$NVHPC_ROOT/cuda/lib64" \
+CUDA_INC="$NVHPC_ROOT/cuda/include" --enable-cuda-aware-mpi
 
 make meshfem3D
 mpirun -np 6 ./bin/xmeshfem3D 
