@@ -3,8 +3,8 @@ run:
 ```
 git clone --recursive --branch devel https://github.com/SPECFEM/specfem3d_globe.git
 ```
-then run this script in specfem3d_globe/ 
-the script will configure, compile, and run the mesher
+then run this script in specfem3d_globe/  
+the script will configure the source code, compile, and run the mesher
 ```sh
 #!/bin/bash
 #SBATCH --job-name=specfem3d
