@@ -1,8 +1,10 @@
-# Specfem3D
-First:
+# Specfem3D 
+
+First run:
 ```
 git clone --recursive --branch devel https://github.com/SPECFEM/specfem3d_globe.git
 ```
+## CPU
 Then modify the Par_file
 Requirements:
 - NPROC_XI = NPROC_ETA
@@ -44,6 +46,52 @@ mpirun -np 24 ./bin/xmeshfem3D
 make specfem3D
 mpirun -np 24 ./bin/xspecfem3D
 ```
+## GPU
+```sh
+#! /bin/bash
+#SBATCH -e error_%j.log
+#SBATCH -o output_%j.log
+# ===== 此處 Slurm 參數請勿更動 =====
+#SBATCH --job-name=specfem3D
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=4
+#SBATCH --time=00:06:00
+#SBATCH --account="ACD114003"
+# ===================================
+
+# ===== 調整 GPU (MPI Rank) 數量 =====
+#SBATCH --gres=gpu:6
+#SBATCH --ntasks-per-node=6
+# ====================================
+
+
+module load nvhpc-24.11_hpcx-2.20_cuda-12.6 gcc10/10.2.1
+
+cd /home/achilles0x17/specfem3d_globe
+
+git submodule update --init --recursive
+
+make clean
+
+./configure --with-cuda=cuda9 CUDA_LIB="$NVHPC_ROOT/cuda/lib64" CUDA_INC="$NVHPC_ROOT/cuda/include" --enable-cuda-aware-mpi
+
+make meshfem3D
+mpirun -np 6 ./bin/xmeshfem3D 
+
+make specfem3D
+
+ml miniconda3/conda24.5.0_py3.9 gcc10/10.2.1 nvhpc-24.11_hpcx-2.20_cuda-12.6
+ml cuda/12.8
+# To do profiling, uncomment below
+# PROFILER="nsys profile --trace cuda,nvtx,openmp,mpi --delay 10 --duration 10 --output specfem3D-profile-${SLURM_JOB_ID}.nsys-rep"
+# ml cuda/12.8
+
+$PROFILER \
+    mpirun -np 6 ./bin/xspecfem3D
+```
+Par_file:
+- USE_GPU = .true.
+
 
 check that you have  
 - ./OUTPUT_FILES/values_from_mesher.h
